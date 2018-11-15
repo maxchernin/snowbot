@@ -1,0 +1,32 @@
+{
+  "name": "snowbot",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "firebase-admin": "^5.8.2",
+    "firebase-functions": "^0.8.1"
+  },
+  "description": "first repository",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxchernin/snowbot.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "snow"
+  ],
+  "author": "Max Chernin Danny Gusev",
+  "bugs": {
+    "url": "https://github.com/maxchernin/snowbot/issues"
+  },
+  "homepage": "https://github.com/maxchernin/snowbot#readme"
+}
