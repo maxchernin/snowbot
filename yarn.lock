@@ -2778,22 +2778,12 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-telegram-node-bot@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/telegram-node-bot/-/telegram-node-bot-4.0.5.tgz#1f565acbe89925b0127656606696d8761bea1907"
-  dependencies:
-    tiny_request latest
-
 through2@^2.0.0, through2@^2.0.3:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"
   dependencies:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
-
-tiny_request@latest:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/tiny_request/-/tiny_request-1.0.13.tgz#81b99777947519d34b0e73ac9eb6f5027a552f92"
 
 to-object-path@^0.3.0:
   version "0.3.0"
