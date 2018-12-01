@@ -61,6 +61,14 @@ bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
     console.log(msg);
+    axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+'?app_id='+appId+"&app_key="+appKey, {})
+    .then((response) => {
+      console.log(response.data);
+      bot.sendMessage(msg.chat.id, response.data.toString())
+    })
+    .catch((error) => {
+
+    })
       // bot.sendMessage(msg.chat.id, "Select a country:", {
       //   "reply_markup": {
       //     "keyboard": [["France"], KeyBoards.Back ]
