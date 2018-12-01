@@ -37,7 +37,10 @@ var days =[
   {date: d.getDate()+5 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:2},
   {date: d.getDate()+6 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:5}
 ];
-
+var KeyBoards = {
+  "Back": ["Back"],
+  "siteReports": ["Snow Report", "Snow Forecast"]
+}
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -54,34 +57,17 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 
 // Listen for any kind of message. There are different kinds of
 // messages.
-// bot.on('message', (msg) => {
-//   var tempString = "gudauri";
-//   var summary =""
-//   CreateDays(); // creats days string for "bot.sendmessage" - created to see if its works
-//   const chatId = msg.chat.id;
-//   if(msg.text.toString().toLowerCase().indexOf(tempString) === 0 ){
-//     //סיכום מסויים של שלג.. לזה התכוונת? אם לא לא נורא חחח
-//     if(gudauri.amountOfSnow == 0)
-//       summary ="אין שלג";
-//     if(gudauri.amountOfSnow >0 && gudauri.amountOfSnow <6)
-//       summary = "שלג בינוני";
-//     else
-//       summary = "שלג כבד";
-//     bot.sendMessage(chatId,"שם אתר: " + gudauri.placeName + "\nעדכון אחרון: " + gudauri.lastUpdate + "\nטמפרטורה: " + gudauri.temperature + "\n\nסיכום: " + summary + "\n\nשלג (שבוע מהיום) " + daysString);
-//   }
-//   //console.log(msg.text.toString());
-//   // send a message to the chat acknowledging receipt of their message
-//   //bot.sendMessage(chatId, 'Received your message ' + msg.text.toString());
-// });
 bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-      bot.sendMessage(msg.chat.id, "Select a country:", {
-        "reply_markup": {
-          "keyboard": [["France"], , ["Back"]]
-        }
-      });
+    console.log(msg);
+      // bot.sendMessage(msg.chat.id, "Select a country:", {
+      //   "reply_markup": {
+      //     "keyboard": [["France"], KeyBoards.Back ]
+      //   }
+      // });
   }
+
   var France = "France";
   if (msg.text.indexOf(France) === 0) {
       bot.sendMessage(msg.chat.id, "Select a resort", {
@@ -92,8 +78,14 @@ bot.on('message', (msg) => {
   } 
   var valThorens = "Val Thorens";
   if (msg.text.indexOf(valThorens) === 0) {
-    bot.sendMessage(msg.chat.id);
+    bot.sendMessage(msg.chat.id, "Val Thorens:", {
+      "reply_markup": {
+        "keyboard": [KeyBoards.siteReports]
+      }
+    });
   }
+
+
 
 });
 
