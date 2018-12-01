@@ -61,7 +61,6 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-    console.log(msg);
     axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
       console.log(response.data);
@@ -70,7 +69,7 @@ bot.on('message', (msg) => {
     .catch((error) => {
 
     })
-    var report = "Sno Report";
+    var report = "Snow Report";
     if(msg.text.indexOf(report) === 0) {
       axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
