@@ -14,6 +14,7 @@ const resortsId = {
   },  
   gudauri: "54888031"
 }
+const apiSuffix = '?app_id='+appId+"&app_key="+appKey;
 
 
 // Create a bot that uses 'polling' to fetch new updates
@@ -61,7 +62,7 @@ bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
     console.log(msg);
-    axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+'?app_id='+appId+"&app_key="+appKey, {})
+    axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
       console.log(response.data);
       bot.sendMessage(msg.chat.id, response.data.toString())
@@ -69,6 +70,17 @@ bot.on('message', (msg) => {
     .catch((error) => {
 
     })
+    var report = "Sno Report";
+    if(msg.text.indexOf(report) === 0) {
+      axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
+    .then((response) => {
+      console.log(response.data);
+      bot.sendMessage(msg.chat.id, response.data.toString())
+    })
+    .catch((error) => {
+
+    })
+    }
       // bot.sendMessage(msg.chat.id, "Select a country:", {
       //   "reply_markup": {
       //     "keyboard": [["France"], KeyBoards.Back ]
