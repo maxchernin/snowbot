@@ -7,11 +7,12 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
     "node-telegram-bot-api": "^0.30.0",
     "request": "^2.83.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "description": "first repository",
   "repository": {
     "type": "git",
