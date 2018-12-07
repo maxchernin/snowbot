@@ -1,5 +1,5 @@
 
-// exports.handler = (event, context, callback) => {
+exports.handler = (event, context, callback) => {
 
 "use strict";
 
@@ -11,7 +11,6 @@ const token ="509757534:AAFs9jUqQrRZsZ6bYqGFhXKoG1Bk1yYWYV0";
 const appKey = "601a275a6193c68473a0c215f7c12a06";
 const appId = "1c8f4af7";
 const baseURL = "https://api.weatherunlocked.com/"
-$ curl --data "url=https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production" "https://api.telegram.org/bot<ACCESS_TOKEN>/setWebhook"
 const resortsId = {
   "france": {
     "valThorens": "333020"
@@ -113,7 +112,6 @@ bot.on('polling_error', (error) => {
   console.log(error.code);  // => 'EFATAL'
 });
 
-// }
 
 setInterval(() => {
   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
@@ -122,3 +120,4 @@ setInterval(() => {
     }
   })
 }, 5000)
+}
