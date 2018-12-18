@@ -1,3 +1,6 @@
+
+exports.handler = (event, context, callback) => {
+
 "use strict";
 
 const TelegramBot = require('node-telegram-bot-api');
@@ -17,29 +20,11 @@ const resortsId = {
   gudauri: "54888031"
 }
 const apiSuffix = '?app_id='+appId+"&app_key="+appKey;
-
+const productionURL = 'https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production'
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
-//gudauri object
-var gudauri = {
-      placeName:"shvili",
-      lastUpdate:"20/10/2018",
-      temperature:-2,
-      amountOfSnow:3
-};
-var daysString = "";
-//i dont know how you will get the data so for now its array with objects
-var d = new Date();
-var days =[
-  {date: d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear(), snow:2},
-  {date: d.getDate()+1 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:5},
-  {date: d.getDate()+2 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:1},
-  {date: d.getDate()+3 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:0.5},
-  {date: d.getDate()+4 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:3},
-  {date: d.getDate()+5 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:2},
-  {date: d.getDate()+6 + "/" + d.getMonth() + "/" + d.getFullYear(), snow:5}
-];
+
 var KeyBoards = {
   "Back": ["Back"],
   "siteReports": ["Snow Report", "Snow Forecast"]
@@ -63,21 +48,27 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-    console.log(msg);
     axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
       console.log(response.data);
+
       data = response.data;
       CreateDays();
       bot.sendMessage(msg.chat.id, "אתר: " + response.data.name + "\n" +
                                    "מדינה: " + response.data.country + "\n" +
                                    "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
                                    daysString)
+
+      bot.sendMessage(msg.chat.id, response.data.forecast[0].snow_mm + "mm of snow from: " + response.data.forecast[0].date);
+
     })
     .catch((error) => {
 
     })
+
   }
+
+
     var report = "Snow Report";
     if(msg.text.indexOf(report) === 0) {
       axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
@@ -127,6 +118,7 @@ bot.onText(/\/start/, (msg) => {
   });
       
   });
+
 var morning = "10:00";
 var night = "22:00";
 function CreateDays(){
@@ -168,6 +160,9 @@ function CreateDays(){
   }
   //console.log(daysString);
 }
+
+
+
 bot.on('webhook_error', (error) => {
   console.log(error.code);  // => 'EPARSE'
 });
@@ -175,3 +170,13 @@ bot.on('webhook_error', (error) => {
 bot.on('polling_error', (error) => {
   console.log(error.code);  // => 'EFATAL'
 });
+
+
+setInterval(() => {
+  axios.post(`https://api.telegram.org/${token}/setWebhook`, {
+    params: {
+      url: productionURL
+    }
+  })
+}, 5000)
+}
