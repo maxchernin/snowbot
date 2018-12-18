@@ -1,5 +1,5 @@
 
-exports.handler = (event, context, callback) => {
+// exports.handler = (event, context, callback) => {
 
 "use strict";
 
@@ -50,7 +50,7 @@ bot.on('message', (msg) => {
   if (msg.text.indexOf(forecast) === 0) {
     axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
-      console.log(response.data);
+      console.log("snow mm:", response.data.forecast[0].snow_mm);
 
       data = response.data;
       CreateDays();
@@ -162,7 +162,6 @@ function CreateDays(){
 }
 
 
-
 bot.on('webhook_error', (error) => {
   console.log(error.code);  // => 'EPARSE'
 });
@@ -172,11 +171,14 @@ bot.on('polling_error', (error) => {
 });
 
 
-setInterval(() => {
-  axios.post(`https://api.telegram.org/${token}/setWebhook`, {
-    params: {
-      url: productionURL
-    }
-  })
-}, 5000)
-}
+// setInterval(() => {
+//   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
+//     params: {
+//       url: productionURL
+//     }
+//   })
+//   .catch( (e) => {
+//     console.error(e);
+//   })
+// }, 5000)
+// }
