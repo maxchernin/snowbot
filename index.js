@@ -7,6 +7,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 
 var data;
+var daysString;
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token ="509757534:AAFs9jUqQrRZsZ6bYqGFhXKoG1Bk1yYWYV0";
@@ -45,13 +46,13 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 
 // Listen for any kind of message. There are different kinds of
 // messages.
+
 bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
     axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
     .then((response) => {
       console.log("snow mm:", response.data.forecast[0].snow_mm);
-
       data = response.data;
       CreateDays();
       bot.sendMessage(msg.chat.id, "אתר: " + response.data.name + "\n" +
@@ -59,27 +60,21 @@ bot.on('message', (msg) => {
                                    "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
                                    daysString)
 
-      bot.sendMessage(msg.chat.id, response.data.forecast[0].snow_mm + "mm of snow from: " + response.data.forecast[0].date);
-
-    })
-    .catch((error) => {
-
-    })
+      //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
+    });
+    
 
   }
 
+  var report = "Snow Report";
+  if(msg.text.indexOf(report) === 0) {
+    axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
+  .then((response) => {
+    console.log(response.data);
+    bot.sendMessage(msg.chat.id, response.data.resortid.toString())
+    });
 
-    var report = "Snow Report";
-    if(msg.text.indexOf(report) === 0) {
-      axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
-    .then((response) => {
-      console.log(response.data);
-      bot.sendMessage(msg.chat.id, response.data.resortid.toString())
-    })
-    .catch((error) => {
-
-    })
-   }
+  }
       // bot.sendMessage(msg.chat.id, "Select a country:", {
       //   "reply_markup": {
       //     "keyboard": [["France"], KeyBoards.Back ]
