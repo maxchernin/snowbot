@@ -45,7 +45,7 @@ const resortsMap = {
 var KeyBoards = {
   "Back": [{text: "Back"}],
   "siteReports": [{text: "Snow Report"}, {text: "Snow Forecast"}],
-  "countries": [{text: "Georgia"}, {text: "Austria"}, {text: "France"}, {text: "Bulgaria"}, {text: "Italy"}],
+  "countries": [{text: "Georgia"}, {text: "Austria"}, {text: "France"}, {text: "Bulgaria"}],
   "Georgia": [{"text": "Gudauri", callback_data: 'Gudauri'}, {"text": "Bakuriani", callback_data: 'Bakuriani'}, {"text": 'Mestia', callback_data: 'Mestia'}]
 }
 
@@ -55,6 +55,8 @@ var night = "22:00";
 var data;
 var daysString;
 
+
+//TODO: add emojis to lines.
 function CreateDays(){
   //JSON.stringify(days);
   daysString = "";
@@ -121,41 +123,47 @@ bot.onText(/\/start/, (msg) => {
 
 
 bot.onText(/\Georgia/, (msg) => {
-  console.log(msg);
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Gudauri", callback_data: 'Gudauri'}, {"text": "Bakuriani", callback_data: 'Bakuriani'}, {"text": 'Mestia', callback_data: 'Mestia'}]],
-      // "keyboard": [[{"text": "Val Thorens",  callback_data: 'development'}], ["Back"]] //list all available resorts 
+      "inline_keyboard": [[{"text": "Gudauri", callback_data: resortsMap.Georgia.Gudauri.resortId}, {"text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId}, {"text": 'Mestia', callback_data: resortsMap.Georgia.Mestia.resortId}]],
     }
   } )
 })
 
+//TODO: fill in missing resort id's on callback data like above
+bot.onText(/\France/, (msg) => {
+  bot.sendMessage(msg.chat.id, "Select a resort", {
+    "reply_markup": {
+      "inline_keyboard": [[{"text": "Tignes", callback_data: 'Tignes'}, {"text": "Val Thorens", callback_data: 'valThorens'}]],
+    }
+  })
+})
+
+bot.onText(/\Bulgaria/, (msg) => {
+  bot.sendMessage(msg.chat.id, "Select a resort", {
+    "reply_markup": {
+      "inline_keyboard": [[{"text": "Bansko", callback_data: 'Bansko'}]],
+    }
+  })
+})
+
+bot.onText(/\Austria/, (msg) => {
+  bot.sendMessage(msg.chat.id, "Select a resort", {
+    "reply_markup": {
+      "inline_keyboard": [[{"text": "Mayerhofen", callback_data: 'Mayerhofen'}]],
+    }
+  })
+})
+
 // Listen for any kind of message. There are different kinds of
 // messages.
-
 bot.on('message', (msg) => {
-  var France = "France";
-  if (msg.text.indexOf(France) === 0) {
-      bot.sendMessage(msg.chat.id, "Select a resort", {
-        "reply_markup": {
-          "inline_keyboard": [],
-          // "keyboard": [[{"text": "Val Thorens",  callback_data: 'development'}], ["Back"]] //list all available resorts 
-        }
-      });
-  } 
-  
-  var valThorens = "Val Thorens";
-  if (msg.text.indexOf(valThorens) === 0) {
-    bot.sendMessage(msg.chat.id, "Val Thorens:", {
-      "reply_markup": {
-        "inline_keyboard": [KeyBoards.siteReports]
-      }
-    });
-  }
 
+
+//TODO: deprecated move to its own handler  
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-    axios.get(baseURL+"api/resortforecast/"+resortsId.georgia.gudauri+apiSuffix, {})
+    axios.get(baseURL+"api/resortforecast/"+resortsId.Georgia.gudauri+apiSuffix, {})
     .then((response) => {
       console.log("snow mm:", response.data.forecast[0].snow_mm);
       data = response.data;
@@ -174,7 +182,7 @@ bot.on('message', (msg) => {
 
   }
   
-
+//TODO: deprecated move to its own handler  
   var report = "Snow Report";
   if(msg.text.indexOf(report) === 0) {
     axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
@@ -191,6 +199,14 @@ bot.on('message', (msg) => {
 
 });
 
+// Listen to inline button presses\messages
+bot.on("callback_query", (callbackQuery) => {
+  const message = callbackQuery.message;
+  console.log(callbackQuery);
+  //@TODO - handle each site here.
+  bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data);
+});
+
 
 bot.on('webhook_error', (error) => {
   console.log(error.code);  // => 'EPARSE'
@@ -200,16 +216,13 @@ bot.on('polling_error', (error) => {
   console.log(error.code);  // => 'EFATAL'
 });
 
+
+//in development
 bot.on('chosen_inline_result', result => {
   console.log(result);
 })
 
-bot.on("callback_query", (callbackQuery) => {
-  const message = callbackQuery.message;
-  console.log(message);
-  console.log(callbackQuery);
-  console.log("mensahe");
-});
+
 // setInterval(() => {
 //   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
 //     params: {
