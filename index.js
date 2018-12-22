@@ -22,6 +22,7 @@ const bot = new TelegramBot(token, {polling: true});
 const resortsMap = {
   "France": {
     "ValThorens": {"resortId": "333020"},
+    "Tignes" : {"resortId" : ""}
   },  
   "Georgia": {
     "Gudauri": {"resortId": "54888031"},
@@ -35,7 +36,7 @@ const resortsMap = {
     "": {"resortId": ""}
   },
   "Austria": {
-    "": {"resortId": ""}
+    "Mayerhofen": {"resortId": ""}
   }
 
 }
@@ -135,7 +136,7 @@ bot.onText(/\Georgia/, (msg) => {
 bot.onText(/\France/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Tignes", callback_data: 'Tignes'}, {"text": "Val Thorens", callback_data: 'valThorens'}]],
+      "inline_keyboard": [[{"text": "Tignes", callback_data: resortsMap.France.Tignes.resortId}, {"text": "Val Thorens", callback_data: resortsMap.France.ValThorens.resortId}]],
     }
   })
 })
@@ -143,7 +144,7 @@ bot.onText(/\France/, (msg) => {
 bot.onText(/\Bulgaria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Bansko", callback_data: 'Bansko'}]],
+      "inline_keyboard": [[{"text": "Bansko", callback_data: resortsMap.Bulgaria.Bansko.resortId}]],
     }
   })
 })
@@ -151,7 +152,7 @@ bot.onText(/\Bulgaria/, (msg) => {
 bot.onText(/\Austria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Mayerhofen", callback_data: 'Mayerhofen'}]],
+      "inline_keyboard": [[{"text": "Mayerhofen", callback_data: resortsMap.Austria.Mayerhofen.resortId}]],
     }
   })
 })
