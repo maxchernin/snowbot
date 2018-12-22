@@ -71,7 +71,7 @@ function CreateDays(){
     {
       daysString += "------------------------------------------------------------";
       daysString += "\n";
-      daysString += "תאריך : " + data.forecast[j].date.toString() + " \n";
+      daysString += "תאריך 📅 : " + data.forecast[j].date.toString() + " \n";
       daysString += "שעה ☀️ : " + data.forecast[j].time.toString() + " \n";
       daysString += "טמפרטורה 🌡️ : " + data.forecast[j].base.temp_c.toString() + " C°"  + " \n";
       daysString += "שלג ❄️: " + data.forecast[j].snow_mm.toString() + " מ'מ" + "\n";
@@ -82,6 +82,7 @@ function CreateDays(){
     }
     if(data.forecast[j].time.toString() === night)
     {
+      daysString += "תאריך 📅 : " + data.forecast[j].date.toString() + " \n";
       daysString += "תאריך : " + data.forecast[j].date.toString() + " \n";
       daysString += "שעה 🌑 : " + data.forecast[j].time.toString() + " \n";
       daysString += "טמפרטורה 🌡️ : " + data.forecast[j].base.temp_c.toString() + " C°" + " \n";
@@ -122,7 +123,7 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\Georgia/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Gudauri", callback_data: {resortID : resortsMap.Georgia.Gudauri.resortId.toString(), flag: "flag"}}, {"text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId}, {"text": 'Mestia', callback_data: resortsMap.Georgia.Mestia.resortId}]],
+      "inline_keyboard": [[{"text": "Gudauri", callback_data:  resortsMap.Georgia.Gudauri.resortId}, {"text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId}, {"text": 'Mestia', callback_data: resortsMap.Georgia.Mestia.resortId}]],
     }
   });
 });
@@ -200,16 +201,16 @@ bot.on("callback_query", (callbackQuery) => {
     data = response.data;
     let daysString = CreateDays();
     console.log(daysString);
-    bot.sendMessage(callbackQuery.message.chat.id, "אתר: " + response.data.name + "\n" +
-                                 "מדינה: " + response.data.country + "\n" +
-                                 "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
+    bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
+                                 "אתר: 🏔️" + response.data.name + "\n" +
+                                 "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
                                  daysString)
 
   })
   .catch((e) => {
     console.error(e);
   });
-  bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data);
+  bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data.flag);
 });
 
 
