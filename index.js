@@ -26,7 +26,8 @@ const resortsMap = {
   "Georgia": {
     "Gudauri": {"resortId": "54888031"},
     "Mestia": {"resortId": "54888033"},
-    "Bakuriani": {"resortId": "54883989"}
+    "Bakuriani": {"resortId": "54883989"},
+    "emoji" : {"flag" : "\u{1F1EC}\u{1F1EA}"}
   },
   "Bulgaria": {
     "Bansko": {"resortId": "54883463"}
@@ -41,13 +42,11 @@ const resortsMap = {
 }
 
 
-
 var KeyBoards = {
   "Back": [{text: "Back"}],
   "siteReports": [{text: "Snow Report"}, {text: "Snow Forecast"}],
   "countriesOne": [{text: "🇧🇬 Bulgaria"}, {text: "\u{1F1EC}\u{1F1EA} Georgia"}],
   "countriesTwo": [{text: "🇦🇹 Austria"}, {text: "🇫🇷 France"}],
-  "Georgia": [{"text": "Gudauri", callback_data: 'Gudauri'}, {"text": "Bakuriani", callback_data: 'Bakuriani'}, {"text": 'Mestia', callback_data: 'Mestia'}]
 }
 
 
@@ -68,24 +67,30 @@ function CreateDays(){
     {
       daysString += "------------------------------------------------------------";
       daysString += "\n";
-      daysString += "תאריך : " + data.forecast[j].date.toString() + " \n";
-      daysString += "זמן : " + data.forecast[j].time.toString() + " \n";
-      daysString += "שלג 🌨️ ️(מ'מ) : " + data.forecast[j].snow_mm.toString() + "מ'מ" + "\n";
-      daysString += "גשם (ממ) : " + data.forecast[j].rain_mm.toString() + " \n";
-      daysString += "לחות : " + data.forecast[j].hum_pct.toString() + "% \n";
-      daysString += "מהירות רוח (קילומטר לשעה) : " + data.forecast[j].vis_km.toString() + " \n";
+      daysString += "תאריך 📅 : " + data.forecast[j].date.toString() + " \n";
+      daysString += "שעה ☀️ : " + data.forecast[j].time.toString() + " \n";
+      daysString += "טמפרטורה 🌡️ : " + data.forecast[j].base.temp_c.toString() + " C°"  + " \n";
+      daysString += "שלג ❄️: " + data.forecast[j].snow_mm.toString() + " מ'מ" + "\n";
+      daysString += "גשם ☔ : " + data.forecast[j].rain_mm.toString() + " מ'מ" +" \n";
+      daysString += "לחות 💧 : " + data.forecast[j].hum_pct.toString() + "% \n";
+      daysString += "רוח 🌬️ : " + data.forecast[j].vis_km.toString() + " קמ'ש" +" \n";
       daysString += "\n";
     }
     if(data.forecast[j].time.toString() === night)
     {
+      daysString += "תאריך 📅 : " + data.forecast[j].date.toString() + " \n";
       daysString += "תאריך : " + data.forecast[j].date.toString() + " \n";
-      daysString += "זמן : " + data.forecast[j].time.toString() + " \n";
-      daysString += "שלג (ממ) : " + data.forecast[j].snow_mm.toString() + " \n";
-      daysString += "גשם (ממ) : " + data.forecast[j].rain_mm.toString() + " \n";
-      daysString += "לחות : " + data.forecast[j].hum_pct.toString() + "% \n";
-      daysString += "מהירות רוח (קילומטר לשעה) : " + data.forecast[j].vis_km.toString() + " \n";
+      daysString += "שעה 🌑 : " + data.forecast[j].time.toString() + " \n";
+      daysString += "טמפרטורה 🌡️ : " + data.forecast[j].base.temp_c.toString() + " C°" + " \n";
+      daysString += "שלג ❄️ : " + data.forecast[j].snow_mm.toString() + " מ'מ" + "\n";
+      daysString += "גשם ☔ : " + data.forecast[j].rain_mm.toString() + " מ'מ" +" \n";
+      daysString += "לחות 💧 : " + data.forecast[j].hum_pct.toString() + "% \n";
+      daysString += "רוח 🌬️ : " + data.forecast[j].vis_km.toString() + " קמ'ש" + " \n";
+      //daysString += "-----------------------"
     }
 
+
+    //"\n [" + days[j].date + "] - [" + days[j].snow + "] סמ ";
   }
   return daysString;
   //console.log(daysString);
@@ -96,10 +101,8 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
   // of the message
-
   const chatId = msg.chat.id;
   const resp = match[1]; // the captured "whatever"
-
   // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, resp);
 });
@@ -111,18 +114,15 @@ bot.onText(/\/start/, (msg) => {
       "keyboard": [ KeyBoards.countriesOne, KeyBoards.countriesTwo]
       }
   });
-      
 });
-
-
 
 bot.onText(/\Georgia/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
       "inline_keyboard": [[{"text": "Gudauri", callback_data: resortsMap.Georgia.Gudauri.resortId}, {"text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId}]],
     }
-  } )
-})
+  });
+});
 
 //, {"text": 'Mestia', callback_data: resortsMap.Georgia.Mestia.resortId}
 
@@ -130,10 +130,10 @@ bot.onText(/\Georgia/, (msg) => {
 bot.onText(/\France/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Tignes", callback_data:  resortsMap.France.Tignes.resortId}]],
+      "inline_keyboard": [[{"text": "ValThorens", callback_data: resortsMap.France.ValThorens.resortId}, {"text": "Tignes", callback_data: resortsMap.France.Tignes.resortId}]],
     }
-  })
-})
+  });
+});
 
 //{"text": "Val Thorens", callback_data: 'valThorens'}
 
@@ -142,60 +142,54 @@ bot.onText(/\Bulgaria/, (msg) => {
     "reply_markup": {
       "inline_keyboard": [[{"text": "Bansko", callback_data: resortsMap.Bulgaria.Bansko.resortId}]],
     }
-  })
-})
+  });
+});
 
 bot.onText(/\Austria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
       "inline_keyboard": [[{"text": "Mayrhofen", callback_data: resortsMap.Austria.Mayrhofen.resortId}]], //callback data can be an object containing multiple keys e.g. {resordIt: 12312, resortName: "X"} etc.
     }
-  })
-})
+  });
+});
 
 // Listen for any kind of message. There are different kinds of
 // messages.
-bot.on('message', (msg) => {
+/*bot.on('message', (msg) => {
+  //TODO: deprecated move to its own handler  
+  var forecast = "Snow Forecast";
+  if (msg.text.indexOf(forecast) === 0) {
+    axios.get(baseURL+"api/resortforecast/"+resortsId.Georgia.gudauri+apiSuffix, {})
+    .then((response) => {
+      console.log("snow mm:", response.data.forecast[0].snow_mm);
+      data = response.data;
+      CreateDays();
+      bot.sendMessage(msg.chat.id, "אתר: " + response.data.name + "\n" +
+                                   "מדינה: " + response.data.country + "\n" +
+                                   "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
+                                   daysString)
 
+      //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  }
 
-//TODO: deprecated move to its own handler  
-  // var forecast = "Snow Forecast";
-  // if (msg.text.indexOf(forecast) === 0) {
-  //   axios.get(baseURL+"api/resortforecast/"+resortsId.Georgia.gudauri+apiSuffix, {})
-  //   .then((response) => {
-  //     data = response.data;
-  //     CreateDays();
-  //     bot.sendMessage(msg.chat.id, "אתר: " + response.data.name + "\n" +
-  //                                  "מדינה: " + response.data.country + "\n" +
-  //                                  "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
-  //                                  daysString)
-
-  //     //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
-  //   })
-  //   .catch((e) => {
-  //     console.error(e);
-  //   });
-    
-
-  // }
-  
-// //TODO: deprecated move to its own handler  
-//   var report = "Snow Report";
-//   if(msg.text.indexOf(report) === 0) {
-//     axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
-//   .then((response) => {
-//     // console.log(response.data);
-//     bot.sendMessage(msg.chat.id, response.data.resortid.toString())
-//     })
-//     .catch((e) => {
-//       console.error(e);
-//     });
-
-//   }
-
-
+  //TODO: deprecated move to its own handler  
+  var report = "Snow Report";
+  if(msg.text.indexOf(report) === 0) {
+    axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
+  .then((response) => {
+    console.log(response.data);
+    bot.sendMessage(msg.chat.id, response.data.resortid.toString())
+  })
+  .catch((e) => {
+    console.error(e);
+    });
+  }
 });
-
+*/
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
   //@TODO: - handle each site here. - move to fn
@@ -205,20 +199,16 @@ bot.on("callback_query", (callbackQuery) => {
     data = response.data;
     let daysString = CreateDays();
     console.log(daysString);
-    bot.sendMessage(callbackQuery.message.chat.id, "אתר: " + response.data.name + "\n" +
-                                 "מדינה: " + response.data.country + "\n" +
-                                 "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
+    bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
+                                 "אתר: 🏔️" + response.data.name + "\n" +
+                                 "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
                                  daysString)
 
   })
   .catch((e) => {
     console.error(e);
   });
-  
-  
-  bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data);
-
-
+  bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data.flag);
 });
 
 
