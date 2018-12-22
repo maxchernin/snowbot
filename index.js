@@ -45,7 +45,7 @@ const resortsMap = {
 var KeyBoards = {
   "Back": [{text: "Back"}],
   "siteReports": [{text: "Snow Report"}, {text: "Snow Forecast"}],
-  "countries": [{text: "Georgia"}, {text: "Austria"}, {text: "France"}, {text: "Bulgaria"}],
+  "countries": [{text: "\u{1F1EC}\u{1F1EA} Georgia"}, {text: "🇦🇹 Austria"}, {text: "🇫🇷 France"}, {text: "🇧🇬 Bulgaria"}],
   "Georgia": [{"text": "Gudauri", callback_data: 'Gudauri'}, {"text": "Bakuriani", callback_data: 'Bakuriani'}, {"text": 'Mestia', callback_data: 'Mestia'}]
 }
 
@@ -57,6 +57,7 @@ var daysString;
 
 
 //TODO: add emojis to lines.
+//https://emojiterra.com/
 function CreateDays(){
   //JSON.stringify(days);
   daysString = "";
