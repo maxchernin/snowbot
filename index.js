@@ -42,7 +42,6 @@ const resortsMap = {
 }
 
 
-
 var KeyBoards = {
   "Back": [{text: "Back"}],
   "siteReports": [{text: "Snow Report"}, {text: "Snow Forecast"}],
@@ -92,9 +91,7 @@ function CreateDays(){
       daysString += "מהירות רוח (מייל לשעה) : " + data.forecast[j].vis_mi.toString() + " \n ";
       //daysString += "-----------------------"
     }
-
     //"\n [" + days[j].date + "] - [" + days[j].snow + "] סמ ";
-    
   }
   //console.log(daysString);
 }
@@ -104,10 +101,8 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
   // of the message
-
   const chatId = msg.chat.id;
   const resp = match[1]; // the captured "whatever"
-
   // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, resp);
 });
@@ -119,10 +114,7 @@ bot.onText(/\/start/, (msg) => {
       "keyboard": [ KeyBoards.countries, ["Sample text", "Second sample"]]
       }
   });
-      
 });
-
-
 
 bot.onText(/\Georgia/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
@@ -160,8 +152,6 @@ bot.onText(/\Austria/, (msg) => {
 // Listen for any kind of message. There are different kinds of
 // messages.
 bot.on('message', (msg) => {
-
-
   //TODO: deprecated move to its own handler  
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
@@ -180,8 +170,6 @@ bot.on('message', (msg) => {
     .catch((e) => {
       console.error(e);
     });
-    
-
   }
 
   //TODO: deprecated move to its own handler  
@@ -195,10 +183,7 @@ bot.on('message', (msg) => {
   .catch((e) => {
     console.error(e);
     });
-
   }
-
-
 });
 
 // Listen to inline button presses\messages
@@ -221,11 +206,7 @@ bot.on("callback_query", (callbackQuery) => {
   .catch((e) => {
     console.error(e);
   });
-  
-  
   bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data);
-
-
 });
 
 
