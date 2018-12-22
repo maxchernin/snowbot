@@ -204,8 +204,27 @@ bot.on('message', (msg) => {
 bot.on("callback_query", (callbackQuery) => {
   const message = callbackQuery.message;
   console.log(callbackQuery);
-  //@TODO - handle each site here.
+  //@TODO: - handle each site here. - move to fn
+  axios.get(baseURL+"api/resortforecast/"+callbackQuery.data+apiSuffix, {})
+  .then((response) => {
+    console.log("snow mm:", response.data.forecast[0].snow_mm);
+    data = response.data;
+    CreateDays();
+    bot.sendMessage(callbackQuery.message.chat.id, "אתר: " + response.data.name + "\n" +
+                                 "מדינה: " + response.data.country + "\n" +
+                                 "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
+                                 daysString)
+
+    //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+  
+  
   bot.sendMessage(callbackQuery.message.chat.id, callbackQuery.data);
+
+
 });
 
 
@@ -220,6 +239,7 @@ bot.on('polling_error', (error) => {
 
 //in development
 bot.on('chosen_inline_result', result => {
+  console.log("Max");
   console.log(result);
 })
 
