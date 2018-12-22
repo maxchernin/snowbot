@@ -22,6 +22,7 @@ const bot = new TelegramBot(token, {polling: true});
 const resortsMap = {
   "France": {
     "ValThorens": {"resortId": "333020"},
+    "Tignes": {"resortId": "333018"},
   },  
   "Georgia": {
     "Gudauri": {"resortId": "54888031"},
@@ -29,13 +30,13 @@ const resortsMap = {
     "Bakuriani": {"resortId": "54883989"}
   },
   "Bulgaria": {
-    "Bansko": {"resortId": ""}
+    "Bansko": {"resortId": "54883463"}
   },
   "Italy": {
     "": {"resortId": ""}
   },
   "Austria": {
-    "": {"resortId": ""}
+    "Mayrhofen": {"resortId": "124"}
   }
 
 }
@@ -69,8 +70,8 @@ function CreateDays(){
       daysString += "\n";
       daysString += "תאריך : " + data.forecast[j].date.toString() + " \n";
       daysString += "זמן : " + data.forecast[j].time.toString() + " \n";
-      daysString += "שלג (מ'מ) : " + data.forecast[j].snow_mm.toString() + "מ'מ" + "\n";
-      daysString += "שלג (אינצ') : " + data.forecast[j].snow_in.toString() + " אינצ'" +" \n";
+      daysString += "שלג 🌨️ ️(מ'מ) : " + data.forecast[j].snow_mm.toString() + "מ'מ" + "\n";
+      daysString += "שלג 🌨️ (אינצ') : " + data.forecast[j].snow_in.toString() + " אינצ'" +" \n";
       daysString += "גשם (ממ) : " + data.forecast[j].rain_mm.toString() + " \n";
       daysString += "גשם (אינצ') : " + data.forecast[j].rain_in.toString() + " \n";
       daysString += "לחות : " + data.forecast[j].hum_pct.toString() + "% \n";
@@ -92,9 +93,11 @@ function CreateDays(){
       //daysString += "-----------------------"
     }
 
+
     //"\n [" + days[j].date + "] - [" + days[j].snow + "] סמ ";
     
   }
+  return daysString;
   //console.log(daysString);
 }
 
@@ -135,15 +138,17 @@ bot.onText(/\Georgia/, (msg) => {
 bot.onText(/\France/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Tignes", callback_data: 'Tignes'}, {"text": "Val Thorens", callback_data: 'valThorens'}]],
+      "inline_keyboard": [[{"text": "Tignes", callback_data:  resortsMap.France.Tignes.resortId}]],
     }
   })
 })
 
+//{"text": "Val Thorens", callback_data: 'valThorens'}
+
 bot.onText(/\Bulgaria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Bansko", callback_data: 'Bansko'}]],
+      "inline_keyboard": [[{"text": "Bansko", callback_data: resortsMap.Bulgaria.Bansko.resortId}]],
     }
   })
 })
@@ -151,7 +156,7 @@ bot.onText(/\Bulgaria/, (msg) => {
 bot.onText(/\Austria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{"text": "Mayerhofen", callback_data: 'Mayerhofen'}]],
+      "inline_keyboard": [[{"text": "Mayrhofen", callback_data: resortsMap.Austria.Mayrhofen.resortId}]], //callback data can be an object containing multiple keys e.g. {resordIt: 12312, resortName: "X"} etc.
     }
   })
 })
@@ -202,20 +207,18 @@ bot.on('message', (msg) => {
 
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
-  const message = callbackQuery.message;
-  console.log(callbackQuery);
   //@TODO: - handle each site here. - move to fn
+  bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
   axios.get(baseURL+"api/resortforecast/"+callbackQuery.data+apiSuffix, {})
   .then((response) => {
-    console.log("snow mm:", response.data.forecast[0].snow_mm);
     data = response.data;
-    CreateDays();
+    let daysString = CreateDays();
+    console.log(daysString);
     bot.sendMessage(callbackQuery.message.chat.id, "אתר: " + response.data.name + "\n" +
                                  "מדינה: " + response.data.country + "\n" +
                                  "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
                                  daysString)
 
-    //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
   })
   .catch((e) => {
     console.error(e);
