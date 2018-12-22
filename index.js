@@ -50,7 +50,7 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 bot.on('message', (msg) => {
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-    axios.get(baseURL+"api/resortforecast/"+resortsId.france.valThorens+apiSuffix, {})
+    axios.get(baseURL+"api/resortforecast/"+resortsId.gudauri+apiSuffix, {})
     .then((response) => {
       console.log("snow mm:", response.data.forecast[0].snow_mm);
       data = response.data;
