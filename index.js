@@ -161,14 +161,10 @@ bot.onText(/\Austria/, (msg) => {
 bot.on('message', (msg) => {
 
 
-//TODO: deprecated move to its own handler  
+  //TODO: deprecated move to its own handler  
   var forecast = "Snow Forecast";
   if (msg.text.indexOf(forecast) === 0) {
-<<<<<<< HEAD
-    axios.get(baseURL+"api/resortforecast/"+resortsId.gudauri+apiSuffix, {})
-=======
     axios.get(baseURL+"api/resortforecast/"+resortsId.Georgia.gudauri+apiSuffix, {})
->>>>>>> 62a42f2d29efa966400ec35ec0545585d5cedb22
     .then((response) => {
       console.log("snow mm:", response.data.forecast[0].snow_mm);
       data = response.data;
@@ -186,17 +182,17 @@ bot.on('message', (msg) => {
     
 
   }
-  
-//TODO: deprecated move to its own handler  
+
+  //TODO: deprecated move to its own handler  
   var report = "Snow Report";
   if(msg.text.indexOf(report) === 0) {
     axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
   .then((response) => {
     console.log(response.data);
     bot.sendMessage(msg.chat.id, response.data.resortid.toString())
-    })
-    .catch((e) => {
-      console.error(e);
+  })
+  .catch((e) => {
+    console.error(e);
     });
 
   }
