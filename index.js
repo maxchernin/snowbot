@@ -27,7 +27,8 @@ const resortsMap = {
   "Georgia": {
     "Gudauri": {"resortId": "54888031"},
     "Mestia": {"resortId": "54888033"},
-    "Bakuriani": {"resortId": "54883989"}
+    "Bakuriani": {"resortId": "54883989"},
+    "emoji" : {"flag" : "\u{1F1EC}\u{1F1EA}"}
   },
   "Bulgaria": {
     "Bansko": {"resortId": "000000"}
