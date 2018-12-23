@@ -1,6 +1,20 @@
 
 // exports.handler = (event, context, callback) => {
 
+//TODO: ive written my name next to tasks that i should handle 
+/**
+ *  1. change create days method - use .map\.filter methods 
+ *      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+ *      this is an example api call: 
+ *      http://api.weatherunlocked.com/api/resortforecast/54883463?hourly_interval=12&num_of_days=4&app_id=1c8f4af7&app_key=601a275a6193c68473a0c215f7c12a06
+ *      we need to add hourly_interval and num_of_days params to our api call to display our results instead of getting a large array for every hour of the day
+ *      for stage #1 - display all recieved answer - for a request for 12h interval and 4 days you should get an array of 8 objects, display them all like today
+ * 
+ *  2. add iniline query (max) 
+ *  3. implement dictionary with usage (max)
+ *  4. use the siteReports keyboard to display a keyboard after you click on a resort - and handle api call and responses 
+ */
+
 "use strict";
 
 const TelegramBot = require('node-telegram-bot-api');
@@ -14,7 +28,7 @@ const appId = "1c8f4af7";
 const baseURL = "https://api.weatherunlocked.com/"
 const apiSuffix = '?app_id='+appId+"&app_key="+appKey;
 const productionURL = 'https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production';
-
+const dictionary = require("./utils/Dictionary");
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
 
@@ -22,21 +36,25 @@ const resortsMap = {
   "France": {
     "ValThorens": {"resortId": "333020"},
     "Tignes": {"resortId": "333018"},
+    "flag" : "🇫🇷"
   },  
   "Georgia": {
     "Gudauri": {"resortId": "54888031"},
     "Mestia": {"resortId": "54888033"},
     "Bakuriani": {"resortId": "54883989"},
-    "emoji" : {"flag" : "\u{1F1EC}\u{1F1EA}"}
+    "flag" : "🇬🇪"
+    
   },
   "Bulgaria": {
-    "Bansko": {"resortId": "54883463"}
+    "Bansko": {"resortId": "54883463"},
+    "flag" : "🇧🇬"
   },
   "Italy": {
     "": {"resortId": ""}
   },
   "Austria": {
-    "Mayrhofen": {"resortId": "124"}
+    "Mayrhofen": {"resortId": "124"},
+    "flag" : "🇦🇹"
   }
 
 }
@@ -45,8 +63,8 @@ const resortsMap = {
 var KeyBoards = {
   "Back": [{text: "Back"}],
   "siteReports": [{text: "Snow Report"}, {text: "Snow Forecast"}],
-  "countriesOne": [{text: "🇧🇬 Bulgaria"}, {text: "\u{1F1EC}\u{1F1EA} Georgia"}],
-  "countriesTwo": [{text: "🇦🇹 Austria"}, {text: "🇫🇷 France"}],
+  "countriesOne": [{text: resortsMap.Bulgaria.flag + " Bulgaria"}, {text: resortsMap.Georgia.flag + " Georgia"}],
+  "countriesTwo": [{text: resortsMap.Austria.flag + " Austria"}, {text: resortsMap.France.flag + " France"}],
 }
 
 
@@ -86,26 +104,13 @@ function CreateDays(){
       daysString += "גשם ☔ : " + data.forecast[j].rain_mm.toString() + " מ'מ" +" \n";
       daysString += "לחות 💧 : " + data.forecast[j].hum_pct.toString() + "% \n";
       daysString += "רוח 🌬️ : " + data.forecast[j].vis_km.toString() + " קמ'ש" + " \n";
-      //daysString += "-----------------------"
     }
 
 
-    //"\n [" + days[j].date + "] - [" + days[j].snow + "] סמ ";
   }
   return daysString;
   //console.log(daysString);
 }
-
-// Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, (msg, match) => {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
-  const chatId = msg.chat.id;
-  const resp = match[1]; // the captured "whatever"
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, resp);
-});
 
 bot.onText(/\/start/, (msg) => {
     
