@@ -26,7 +26,10 @@ const token ="509757534:AAFs9jUqQrRZsZ6bYqGFhXKoG1Bk1yYWYV0";
 const appKey = "601a275a6193c68473a0c215f7c12a06";
 const appId = "1c8f4af7";
 const baseURL = "https://api.weatherunlocked.com/"
-const apiSuffix = '?app_id='+appId+"&app_key="+appKey;
+const apiSuffix = '&app_id='+appId+"&app_key="+appKey;
+const hourInterval = "12";
+const numOfDays = "4";
+const apiDaysHours = "?hourly_interval=" + hourInterval + "&num_of_days=" + numOfDays;
 const productionURL = 'https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production';
 const dictionary = require("./utils/Dictionary");
 // Create a bot that uses 'polling' to fetch new updates
@@ -199,11 +202,12 @@ bot.onText(/\Austria/, (msg) => {
 bot.on("callback_query", (callbackQuery) => {
   //@TODO: - handle each site here. - move to fn
   bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
-  axios.get(baseURL+"api/resortforecast/"+callbackQuery.data+apiSuffix, {})
+  axios.get(baseURL+"api/resortforecast/"+callbackQuery.data+apiDaysHours+apiSuffix, {})
   .then((response) => {
     data = response.data;
     let daysString = CreateDays();
     console.log(daysString);
+    console.log(response.data);
     bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
                                  "אתר: 🏔️" + response.data.name + "\n" +
                                  "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
