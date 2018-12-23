@@ -80,9 +80,25 @@ var daysString;
 //TODO: add emojis to lines.
 //https://emojiterra.com/
 function CreateDays(){
+  //console.log(data);
   //JSON.stringify(days);
+  const items = data.forecast.map(function(item, index, array){
+    return "------------------------------------------------------------" +
+           "\n" + 
+           "תאריך 📅 : " + item.date + " \n" +
+           "שעה ☀️ : " + item.time + " \n" +
+           "טמפרטורה 🌡️ : " + item.base.temp_c.toString() + " C°"  + " \n" +
+           "שלג ❄️: " + item.snow_mm.toString() + " מ'מ" + "\n" +
+           "גשם ☔ : " + item.rain_mm.toString() + " מ'מ" +" \n" +
+           "לחות 💧 : " + item.hum_pct.toString() + "% \n" +
+           "רוח 🌬️ : " + item.vis_km.toString() + " קמ'ש" +"\n"
+           + "\n";
+           
+
+  });
   daysString = "";
-  for(var j = 0 ; j < data.forecast.length; j++){
+  console.log(items);
+ /* for(var j = 0 ; j < data.forecast.length; j++){
     //daysString += data.forecast.date + " \n ";
     if(data.forecast[j].time.toString() === morning)
     {
@@ -110,8 +126,9 @@ function CreateDays(){
     }
 
 
-  }
-  return daysString;
+  }*/
+  //return daysString;
+  return items;
   //console.log(daysString);
 }
 
@@ -204,10 +221,11 @@ bot.on("callback_query", (callbackQuery) => {
   bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
   axios.get(baseURL+"api/resortforecast/"+callbackQuery.data+apiDaysHours+apiSuffix, {})
   .then((response) => {
+    
     data = response.data;
     let daysString = CreateDays();
-    console.log(daysString);
-    console.log(response.data);
+    //console.log(daysString);
+    //console.log(items);
     bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
                                  "אתר: 🏔️" + response.data.name + "\n" +
                                  "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
