@@ -3,16 +3,14 @@
 
 //TODO: ive written my name next to tasks that i should handle 
 /**
- *  1. change create days method - use .map\.filter methods 
- *      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
- *      this is an example api call: 
- *      http://api.weatherunlocked.com/api/resortforecast/54883463?hourly_interval=12&num_of_days=4&app_id=1c8f4af7&app_key=601a275a6193c68473a0c215f7c12a06
- *      we need to add hourly_interval and num_of_days params to our api call to display our results instead of getting a large array for every hour of the day
- *      for stage #1 - display all recieved answer - for a request for 12h interval and 4 days you should get an array of 8 objects, display them all like today
- * 
- *  2. add iniline query (max) 
- *  3. implement dictionary with usage (max)
- *  4. use the siteReports keyboard to display a keyboard after you click on a resort - and handle api call and responses 
+ *  1. replace sun emoji  with moon emoji on night time report (23:00)
+ *  2. הפרדה ויזואלית טובה יותר בין הימים
+ *  3. לסנן את הימים שיש בהם שלג
+ *  4.  לסנן את הימים שיש בהם שלג מכל השכבות של ההר - base, mid, top 
+ *    ואז בטוח יהיה מה להציג בהודעה 
+ *  5. add iniline query (max) 
+ *  6. implement dictionary with usage (max)
+ *  7. 
  */
 
 "use strict";
