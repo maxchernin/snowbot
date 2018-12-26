@@ -78,15 +78,22 @@ var daysString;
 //TODO: add emojis to lines.
 //https://emojiterra.com/
 function CreateDays(){
+  var temp ="";
   //console.log(data);
   //JSON.stringify(days);
   const items = data.forecast.map(function(item, index, array){
-    return "------------------------------------------------------------" +
-           "\n" + 
-           "תאריך 📅 : " + item.date + " \n" +
-           "שעה ☀️ : " + item.time + " \n" +
+    //console.log(data.forecast.length);
+    if (index+1 < data.forecast.length  && item.date === data.forecast[index+1].date){
+      temp = "📅--- " + "תאריך : " + item.date + " ---📅" +
+             "\n" + 
+             "שעה ☀️ : " + item.time + " \n";
+    }
+    else{
+      temp =  "שעה 🌑 : " + item.time + " \n";
+    }
+    return temp +
            "טמפרטורה 🌡️ : " + item.base.temp_c.toString() + " C°"  + " \n" +
-           "שלג ❄️: " + item.snow_mm.toString() + " מ'מ" + "\n" +
+           "**bold**שלג ❄️: " + item.snow_mm.toString() + " מ'מ" + "\n" +
            "גשם ☔ : " + item.rain_mm.toString() + " מ'מ" +" \n" +
            "לחות 💧 : " + item.hum_pct.toString() + "% \n" +
            "רוח 🌬️ : " + item.vis_km.toString() + " קמ'ש" +"\n"
@@ -95,7 +102,7 @@ function CreateDays(){
 
   });
   daysString = "";
-  console.log(items);
+  console.log(temp);
  /* for(var j = 0 ; j < data.forecast.length; j++){
     //daysString += data.forecast.date + " \n ";
     if(data.forecast[j].time.toString() === morning)
@@ -227,7 +234,7 @@ bot.on("callback_query", (callbackQuery) => {
     bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
                                  "אתר: 🏔️" + response.data.name + "\n" +
                                  "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
-                                 daysString)
+                                 daysString.join(""))
 
   })
   .catch((e) => {
