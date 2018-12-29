@@ -3,7 +3,7 @@
 
 //TODO: ive written my name next to tasks that i should handle 
 /**
- * 
+ * 1. move sensitive data to external file - remove from git - change api keys
  *  4.  לסנן את הימים שיש בהם שלג מכל השכבות של ההר - base, mid, top 
  *    ואז בטוח יהיה מה להציג בהודעה 
  *  5. add iniline query (max) 
@@ -16,19 +16,12 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 
-
-// replace the value below with the Telegram token you receive from @BotFather
-const token = "509757534:AAFs9jUqQrRZsZ6bYqGFhXKoG1Bk1yYWYV0";
-const appKey = "601a275a6193c68473a0c215f7c12a06";
-const appId = "1c8f4af7";
-const baseURL = "https://api.weatherunlocked.com/"
+const { token, appKey, appId, baseURL, hourInterval, numOfDays, productionURL } = require("./sensitive/data.js");
 const apiSuffix = '&app_id=' + appId + "&app_key=" + appKey;
-const hourInterval = "12";
-const numOfDays = "4";
 const apiDaysHours = "?hourly_interval=" + hourInterval + "&num_of_days=" + numOfDays;
-const productionURL = 'https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production';
 const dictionary = require("./utils/Dictionary");
 let selectedLang;
+var selectedResortId;
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
 
@@ -135,91 +128,84 @@ bot.onText(/\Austria/, (msg) => {
   });
 });
 
-// Listen for any kind of message. There are different kinds of
-// messages.
-/*bot.on('message', (msg) => {
-  //TODO: deprecated move to its own handler  
-  var forecast = "Snow Forecast";
-  if (msg.text.indexOf(forecast) === 0) {
-    axios.get(baseURL+"api/resortforecast/"+resortsId.Georgia.gudauri+apiSuffix, {})
-    .then((response) => {
-      console.log("snow mm:", response.data.forecast[0].snow_mm);
-      data = response.data;
-      CreateDays();
-      bot.sendMessage(msg.chat.id, "אתר: " + response.data.name + "\n" +
-                                   "מדינה: " + response.data.country + "\n" +
-                                   "תחזית לתאריכים " + response.data.forecast[response.data.forecast.length-1].date + " - " + response.data.forecast[0].date + " : \n"  +
-                                   daysString)
-
-      //bot.sendMessage(msg.chat.id, data.forecast[0].snow_mm + "mm of snow from: " + data.forecast[0].date);
-    })
-    .catch((e) => {
-      console.error(e);
-    });
-  }
-
-  //TODO: deprecated move to its own handler  
-  var report = "Snow Report";
-  if(msg.text.indexOf(report) === 0) {
-    axios.get(baseURL+"api/snowreport/"+resortsId.france.valThorens+apiSuffix, {})
-  .then((response) => {
-    console.log(response.data);
-    bot.sendMessage(msg.chat.id, response.data.resortid.toString())
-  })
-  .catch((e) => {
-    console.error(e);
-    });
-  }
-});
-*/
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
+
   //@TODO: - handle each site here. - move to fn
 
-  // if (!userSelectedSite) {
-  //   bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
-  //     "reply_markup": {
-  //       "inline_keyboard": [KeyBoards.siteReports]
-  //     }
-  //   });
-  // }
 
+  if (callbackQuery.data === 'resortforecast') {
+    bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
+    axios.get(baseURL + "api/resortforecast/" + selectedResortId + apiDaysHours + apiSuffix, {})
+      .then((response) => {
 
+        let snowingDaysArr = response.data.forecast.filter((dayPart => {
+          return dayPart.snow_mm > 0;
+        }))
 
-  // if (callbackQuery.data === 'report' || callbackQuery.data === 'resortforecast') {
+        let daysString = CreateDays(response.data);
+        if (snowingDaysArr.length > 0) {
+          bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
+            "אתר: 🏔️" + response.data.name + "\n" +
+            "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
+            daysString.join(""), { parse_mode: 'Markdown' })
+        } else {
+          bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
+        }
 
-  // }
+      })
+      .catch((e) => {
+        console.error(e.response);
+        switch (e.response.status) {
+          case '403': bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
+            break;
+          default: bot.sendMessage(callbackQuery.message.chat.id, "בעיית רשת, אנא נסה שנית מאוחר יותר");
+            break;
+        }
+      });
+  }
+  if (callbackQuery.data === 'report') {
+    bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
+    axios.get(baseURL + "api/snowreport/" + selectedResortId + apiDaysHours + apiSuffix, {})
+      .then((response) => {
 
+        // TODO: @Danny prase a proper message of report - if available - if not - return error message
+        // let snowingDaysArr = response.data.forecast.filter((dayPart => {
+        //   return dayPart.snow_mm > 0;
+        // }))
 
+        // let daysString = CreateDays(response.data);
+        // if (snowingDaysArr.length > 0) {
+        //   bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
+        //     "אתר: 🏔️" + response.data.name + "\n" +
+        //     "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
+        //     daysString.join(""), { parse_mode: 'Markdown' })
+        // } else {
+        //   bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
+        // }
 
-  bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
-  axios.get(baseURL + "api/resortforecast/" + callbackQuery.data + apiDaysHours + apiSuffix, {})
-    .then((response) => {
-
-      let snowingDaysArr = response.data.forecast.filter((dayPart => {
-        return dayPart.snow_mm > 0;
-      }))
-
-      let daysString = CreateDays(response.data);
-      if (snowingDaysArr.length > 0) {
-        bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
-          "אתר: 🏔️" + response.data.name + "\n" +
-          "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
-          daysString.join(""), { parse_mode: 'Markdown' })
-      } else {
-        bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
-      }
-
-    })
-    .catch((e) => {
-      console.error(e.response);
-      switch (e.response.status) {
-        case '403': bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
-          break;
-        default: bot.sendMessage(callbackQuery.message.chat.id, "בעיית רשת, אנא נסה שנית מאוחר יותר");
-          break;
+      })
+      .catch((e) => {
+        console.error(e.response);
+        switch (e.response.status) {
+          case '403': bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
+            break;
+          default: bot.sendMessage(callbackQuery.message.chat.id, "בעיית רשת, אנא נסה שנית מאוחר יותר");
+            break;
+        }
+      });
+  }
+  if (Number.isInteger(parseInt(callbackQuery.data))) {
+    selectedResortId = callbackQuery.data;
+    bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
+      "reply_markup": {
+        "inline_keyboard": [KeyBoards.siteReports]
       }
     });
+  }
+
+
+
 });
 
 
