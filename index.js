@@ -63,8 +63,7 @@ const resortsMap = {
 var KeyBoards = {
   "Back": [{ text: "Back" }],
   "siteReports": [{ text: "4 day Snow Report", callback_data: "report" }, { text: "4 day Snow Forecast", callback_data: "resortforecast" }],
-  "countriesOne": [{ text: resortsMap.Bulgaria.flag + " Bulgaria" }, { text: resortsMap.Georgia.flag + " Georgia" }],
-  "countriesTwo": [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }],
+  "Countries": [[{ text: resortsMap.Bulgaria.flag + " Bulgaria" }, { text: resortsMap.Georgia.flag + " Georgia" }], [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }]]
 }
 
 //https://emojiterra.com/
@@ -91,7 +90,7 @@ bot.onText(/\/start/, (msg) => {
 
   bot.sendMessage(msg.chat.id, "Welcome to snowbro - choose a resort - TODO: text should come from a dictionary", {
     "reply_markup": {
-      "keyboard": [KeyBoards.countriesOne, KeyBoards.countriesTwo]
+      "keyboard": KeyBoards.Countries
     }
   });
 });
