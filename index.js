@@ -30,6 +30,7 @@ const numOfDays = "4";
 const apiDaysHours = "?hourly_interval=" + hourInterval + "&num_of_days=" + numOfDays;
 const productionURL = 'https://bla4tgbed6.execute-api.us-east-1.amazonaws.com/production';
 const dictionary = require("./utils/Dictionary");
+let selectedLang;
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
 
@@ -63,7 +64,7 @@ const resortsMap = {
 
 var KeyBoards = {
   "Back": [{ text: "Back" }],
-  "siteReports": [{ text: "Snow Report" }, { text: "Snow Forecast" }],
+  "siteReports": [{ text: "4 day Snow Report", callback_data: "report" }, { text: "4 day Snow Forecast", callback_data: "resortforecast" }],
   "countriesOne": [{ text: resortsMap.Bulgaria.flag + " Bulgaria" }, { text: resortsMap.Georgia.flag + " Georgia" }],
   "countriesTwo": [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }],
 }
@@ -100,7 +101,10 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\Georgia/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
-      "inline_keyboard": [[{ "text": "Gudauri", callback_data: resortsMap.Georgia.Gudauri.resortId }, { "text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId }]],
+      "inline_keyboard": [[
+        { "text": "Gudauri", callback_data: resortsMap.Georgia.Gudauri.resortId },
+        { "text": "Bakuriani", callback_data: resortsMap.Georgia.Bakuriani.resortId }
+      ]],
     }
   });
 });
@@ -174,6 +178,23 @@ bot.onText(/\Austria/, (msg) => {
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
   //@TODO: - handle each site here. - move to fn
+
+  if (!userSelectedSite) {
+    bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
+      "reply_markup": {
+        "inline_keyboard": [KeyBoards.siteReports]
+      }
+    });
+  }
+
+
+
+  if (callbackQuery.data === 'report' || callbackQuery.data === 'resortforecast') {
+
+  }
+
+
+
   bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
   axios.get(baseURL + "api/resortforecast/" + callbackQuery.data + apiDaysHours + apiSuffix, {})
     .then((response) => {
