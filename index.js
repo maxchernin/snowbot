@@ -179,19 +179,19 @@ bot.onText(/\Austria/, (msg) => {
 bot.on("callback_query", (callbackQuery) => {
   //@TODO: - handle each site here. - move to fn
 
-  if (!userSelectedSite) {
-    bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
-      "reply_markup": {
-        "inline_keyboard": [KeyBoards.siteReports]
-      }
-    });
-  }
+  // if (!userSelectedSite) {
+  //   bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
+  //     "reply_markup": {
+  //       "inline_keyboard": [KeyBoards.siteReports]
+  //     }
+  //   });
+  // }
 
 
 
-  if (callbackQuery.data === 'report' || callbackQuery.data === 'resortforecast') {
+  // if (callbackQuery.data === 'report' || callbackQuery.data === 'resortforecast') {
 
-  }
+  // }
 
 
 
@@ -199,11 +199,19 @@ bot.on("callback_query", (callbackQuery) => {
   axios.get(baseURL + "api/resortforecast/" + callbackQuery.data + apiDaysHours + apiSuffix, {})
     .then((response) => {
 
+      let snowing = response.data.forecast.filter((dayPart => {
+        return dayPart.snow_mm > 0;
+      }))
+
       let daysString = CreateDays(response.data);
-      bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
-        "אתר: 🏔️" + response.data.name + "\n" +
-        "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
-        daysString.join(""), { parse_mode: 'Markdown' })
+      if (snowing.length > 0) {
+        bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
+          "אתר: 🏔️" + response.data.name + "\n" +
+          "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
+          daysString.join(""), { parse_mode: 'Markdown' })
+      } else {
+        bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
+      }
 
     })
     .catch((e) => {
