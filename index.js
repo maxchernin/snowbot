@@ -168,7 +168,7 @@ bot.on("callback_query", (callbackQuery) => {
     bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
     axios.get(baseURL + "api/snowreport/" + selectedResortId + apiDaysHours + apiSuffix, {})
       .then((response) => {
-
+        console.log(response);
         // TODO: @Danny prase a proper message of report - if available - if not - return error message
         // let snowingDaysArr = response.data.forecast.filter((dayPart => {
         //   return dayPart.snow_mm > 0;
@@ -188,7 +188,9 @@ bot.on("callback_query", (callbackQuery) => {
       .catch((e) => {
         console.error(e.response);
         switch (e.response.status) {
-          case '403': bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
+          case 400: bot.sendMessage(callbackQuery.message.chat.id, "עמכם הסליחה, הבוט עדיין אינו תומך בהסטוריית מזג אוויר עבור אתר זה");
+            break;
+          case 403: bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
             break;
           default: bot.sendMessage(callbackQuery.message.chat.id, "בעיית רשת, אנא נסה שנית מאוחר יותר");
             break;
