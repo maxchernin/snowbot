@@ -3,9 +3,7 @@
 
 //TODO: ive written my name next to tasks that i should handle 
 /**
- *  2. הפרדה ויזואלית
- *  טובה יותר בין הימים
- *  3. לסנן את הימים שיש בהם שלג
+ * 
  *  4.  לסנן את הימים שיש בהם שלג מכל השכבות של ההר - base, mid, top 
  *    ואז בטוח יהיה מה להציג בהודעה 
  *  5. add iniline query (max) 
@@ -69,8 +67,8 @@ var KeyBoards = {
   "countriesTwo": [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }],
 }
 
-//TODO: add emojis to lines.
 //https://emojiterra.com/
+//TODO: calc avg of tempature
 function CreateDays(data) {
   const items = data.forecast.map(function (item, index, array) {
     let day = index + 1 < data.forecast.length && item.date === data.forecast[index + 1].date ? true : false;
@@ -80,8 +78,8 @@ function CreateDays(data) {
     טמפרטורה 🌡️: ${ item.base.temp_c.toString()} C°
     * שלג ️❄️️️: ${ item.snow_mm.toString()} מ"מ*
     גשם ☔ : ${ item.rain_mm.toString()} מ"מ
-    לחות 💧 : ${ item.hum_pct.toString()} %
-    רוח 🌬️ : ${ item.vis_km.toString()} קמ"ש 
+    לחות 💧 : ${ item.hum_avg_pct.toString()} %
+    רוח 🌬️ : ${ item.vis_avg_km.toString()} קמ"ש 
       `
     return messageTemplate;
   });
@@ -199,12 +197,12 @@ bot.on("callback_query", (callbackQuery) => {
   axios.get(baseURL + "api/resortforecast/" + callbackQuery.data + apiDaysHours + apiSuffix, {})
     .then((response) => {
 
-      let snowing = response.data.forecast.filter((dayPart => {
+      let snowingDaysArr = response.data.forecast.filter((dayPart => {
         return dayPart.snow_mm > 0;
       }))
 
       let daysString = CreateDays(response.data);
-      if (snowing.length > 0) {
+      if (snowingDaysArr.length > 0) {
         bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
           "אתר: 🏔️" + response.data.name + "\n" +
           "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
