@@ -1,3 +1,4 @@
+process.env["NTBA_FIX_319"] = 1;
 
 // exports.handler = (event, context, callback) => {
 
@@ -55,7 +56,7 @@ const resortsMap = {
 
 var KeyBoards = {
   "Back": [{ text: "Back" }],
-  "siteReports": [{ text: "4 day Snow Report", callback_data: "report" }, { text: "4 day Snow Forecast", callback_data: "resortforecast" }],
+  "siteReports": [{ text: "Snow Report", callback_data: "report" }, { text: "4 day Snow Forecast", callback_data: "resortforecast" }],
   "Countries": [[{ text: resortsMap.Bulgaria.flag + " Bulgaria" }, { text: resortsMap.Georgia.flag + " Georgia" }], [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }]]
 }
 
@@ -131,7 +132,14 @@ bot.onText(/\Austria/, (msg) => {
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
 
-  //@TODO: - handle each site here. - move to fn
+  if (Number.isInteger(parseInt(callbackQuery.data))) {
+    selectedResortId = callbackQuery.data;
+    bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
+      "reply_markup": {
+        "inline_keyboard": [KeyBoards.siteReports]
+      }
+    });
+  }
 
 
   if (callbackQuery.data === 'resortforecast') {
@@ -169,20 +177,17 @@ bot.on("callback_query", (callbackQuery) => {
     axios.get(baseURL + "api/snowreport/" + selectedResortId + apiDaysHours + apiSuffix, {})
       .then((response) => {
         console.log(response);
-        // TODO: @Danny prase a proper message of report - if available - if not - return error message
-        // let snowingDaysArr = response.data.forecast.filter((dayPart => {
-        //   return dayPart.snow_mm > 0;
-        // }))
-
-        // let daysString = CreateDays(response.data);
-        // if (snowingDaysArr.length > 0) {
-        //   bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
-        //     "אתר: 🏔️" + response.data.name + "\n" +
-        //     "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
-        //     daysString.join(""), { parse_mode: 'Markdown' })
-        // } else {
-        //   bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
-        // }
+        const { reportdate, reporttime, lastsnow, newsnow_cm, lowersnow_cm, uppersnow_cm, conditions } = response.data;
+        let template = `${reportdate ? "📅------ " + "*תאריך דיווח* : " + reportdate + " ------📅" : ''}
+        שעת דיווח ${reporttime ? '☀️' : '🌑'}: ${reporttime}
+        * שלג אחרון ️❄️️️: ${lastsnow} *
+        * שלג טרי ️❄️️️: ${ newsnow_cm} ס"מ*
+        שלג במפלס תחתון ️️❄️️️ : ${ lowersnow_cm} ס"מ
+        שלג במפלס עליון ️️❄️️️ : ${ uppersnow_cm} ס"מ
+        תנאי גלישה: ${ conditions}
+        `
+        bot.sendMessage(callbackQuery.message.chat.id,
+          template, { parse_mode: 'Markdown' })
 
       })
       .catch((e) => {
@@ -197,14 +202,7 @@ bot.on("callback_query", (callbackQuery) => {
         }
       });
   }
-  if (Number.isInteger(parseInt(callbackQuery.data))) {
-    selectedResortId = callbackQuery.data;
-    bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
-      "reply_markup": {
-        "inline_keyboard": [KeyBoards.siteReports]
-      }
-    });
-  }
+
 
 
 
