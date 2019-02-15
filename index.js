@@ -4,7 +4,11 @@ process.env["NTBA_FIX_319"] = 1;
 
 //TODO: ive written my name next to tasks that i should handle 
 /**
- * 1. move sensitive data to external file - remove from git - change api keys
+ * 1. cronjob - plan
+ *  get report for each site
+ * parse a report message for each site
+ * save report message locally ?
+ * retrieve message from storage to user
  *  4.  לסנן את הימים שיש בהם שלג מכל השכבות של ההר - base, mid, top 
  *    ואז בטוח יהיה מה להציג בהודעה 
  *  5. add iniline query (max) 
@@ -16,15 +20,33 @@ process.env["NTBA_FIX_319"] = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
+const _ = require("lodash");
 
 const { token, appKey, appId, baseURL, hourInterval, numOfDays, productionURL } = require("./sensitive/data.js");
 const apiSuffix = '&app_id=' + appId + "&app_key=" + appKey;
 const apiDaysHours = "?hourly_interval=" + hourInterval + "&num_of_days=" + numOfDays;
 const dictionary = require("./utils/Dictionary");
+// const schedule = require('node-schedule');
 let selectedLang;
 var selectedResortId;
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
+
+// var rule = new schedule.RecurrenceRule();
+// rule.hour = 0;
+// rule.minute = 0;
+// rule.second = 2;
+
+//cache forecast every 4 hours
+// schedule.scheduleJob(rule, function () {
+//   console.log(new Date(), 'Every 4 hours');
+// });
+
+//cache history daily
+// var j = schedule.scheduleJob('*/1 * * * *', function () {
+//   //
+//   // console.log('The answer to life, the universe, and everything!');
+// });
 
 const resortsMap = {
   "France": {
@@ -52,7 +74,26 @@ const resortsMap = {
   }
 
 }
+// const cronJobCalls = resortsMap.map((country, key) => {
+//   console.log(country);
+//   console.log(key);
+// })
+const cronJobCalls = _.reduce(resortsMap, (iterator, country) => {
+  // console.log(iterator);
+  // console.log(country);
 
+  let resorts = _.filter(country, (resort) => {
+    if (_.has(resort, 'resortId')) {
+      return resort
+    }
+  }).map((resort) => {
+    // console.log(resort.resortId)
+    return resort.resortId
+  })
+  console.log(resorts);
+  return iterator;
+}, [])
+// console.log(cronJobCalls);
 
 var KeyBoards = {
   "Back": [{ text: "Back" }],
@@ -154,7 +195,7 @@ bot.on("callback_query", (callbackQuery) => {
         let daysString = CreateDays(response.data);
         if (snowingDaysArr.length > 0) {
           bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
-            "אתר: 🏔️" + response.data.name + "\n" +
+            "אתר: 🏔️ " + response.data.name + "\n" +
             "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
             daysString.join(""), { parse_mode: 'Markdown' })
         } else {
