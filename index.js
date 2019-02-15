@@ -1,6 +1,6 @@
 process.env["NTBA_FIX_319"] = 1;
 
-// exports.handler = (event, context, callback) => {
+ //exports.handler = (event, context, callback) => {
 
 //TODO: ive written my name next to tasks that i should handle 
 /**
@@ -265,7 +265,7 @@ bot.on('chosen_inline_result', result => {
   console.log(result);
 })
 
-
+ 
 // setInterval(() => {
 //   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
 //     params: {
