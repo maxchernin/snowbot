@@ -101,8 +101,6 @@ const job = new CronJob('*/1 * * * *', function() {
     handleError(e, "report124");
   });
   
-  
-
  //console.log(localStorage.getItem('report124'));
 });
 //console.log('After job instantiation');
@@ -180,7 +178,6 @@ const cronJobCalls = _.reduce(resortsMap, (iterator, country) => {
       return resort
     }
   }).map((resort) => {
-    // console.log(resort.resortId)
     return resort.resortId
   })
   console.log(resorts);
