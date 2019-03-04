@@ -172,7 +172,7 @@ bot.onText(/\Austria/, (msg) => {
 
 // Listen to inline button presses\messages
 bot.on("callback_query", (callbackQuery) => {
-
+  console.log(callbackQuery.da)
   if (Number.isInteger(parseInt(callbackQuery.data))) {
     selectedResortId = callbackQuery.data;
     bot.sendMessage(callbackQuery.message.chat.id, "Select type of report", {
@@ -249,7 +249,7 @@ bot.on("callback_query", (callbackQuery) => {
 
 });
 
-
+/*
 bot.on('webhook_error', (error) => {
   console.log(error.code);  // => 'EPARSE'
 });
@@ -264,7 +264,7 @@ bot.on('chosen_inline_result', result => {
   console.log("Max");
   console.log(result);
 })
-
+*/
 
 // setInterval(() => {
 //   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
