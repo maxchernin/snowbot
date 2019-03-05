@@ -3,7 +3,7 @@ process.env["NTBA_FIX_319"] = 1;
 // exports.handler = (event, context, callback) => {
 
 //TODO: ive written my name next to tasks that i should handle 
-/**
+/*
  * 1. cronjob - plan
  *  get report for each site
  * parse a report message for each site
@@ -18,7 +18,6 @@ process.env["NTBA_FIX_319"] = 1;
 
 "use strict";
 
-
 const CronJob = require('cron/lib/cron.js').CronJob;
 
 
@@ -30,75 +29,75 @@ console.log('Before job instantiation');
 const job = new CronJob('*/1 * * * *', function() {
 
 //--------------------Tinges----------------//
-  axios.get(baseURL + "api/snowreport/" + "333018" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.France.Tignes.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report333018', tempstring);
+    localStorage.setItem('report' + resortsMap.France.Tignes.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report333018");
+    handleError(e, "report" + resortsMap.France.Tignes.resortId);
   });
   
 
 //--------------------ValThorens----------------//
-  axios.get(baseURL + "api/snowreport/" + "333020" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report333020', tempstring);
+    localStorage.setItem('report' + resortsMap.France.ValThorens.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report333020");
+    handleError(e, "report" + resortsMap.France.ValThorens.resortId);
   });
 
   //--------------------Gudauri----------------//
-  axios.get(baseURL + "api/snowreport/" + "54888031" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Gudauri.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report54888031', tempstring);
+    localStorage.setItem('report' + resortsMap.Georgia.Gudauri.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report54888031");
+    handleError(e, "report" + resortsMap.Georgia.Gudauri.resortId);
   });
   
 
   //--------------------Mestia----------------//
-  axios.get(baseURL + "api/snowreport/" + "54888033" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Mestia.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report54888033', tempstring);
+    localStorage.setItem('report' + resortsMap.Georgia.Mestia.resortId, tempstring);
   })
   .catch((e) => {
     handleError(e, "report54888033");
   });
 
   //--------------------Bakuriani----------------//
-  axios.get(baseURL + "api/snowreport/" + "54883989" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Bakuriani.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report54883989', tempstring);
+    localStorage.setItem('report' + resortsMap.Georgia.Bakuriani.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report54883989");
+    handleError(e, "report" + resortsMap.Georgia.Bakuriani.resortId);
   });
 
   //--------------------Bansko----------------//
-  axios.get(baseURL + "api/snowreport/" + "54883463" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.Bulgaria.Bansko.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report54883463', tempstring);
+    localStorage.setItem('report' + resortsMap.Bulgaria.Bansko.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report54883463");
+    handleError(e, "report" + resortsMap.Bulgaria.Bansko.resortId);
   });
 
   //--------------------Mayrhofen----------------//
-  axios.get(baseURL + "api/snowreport/" + "124" + apiDaysHours + apiSuffix, {})
+  axios.get(baseURL + "api/snowreport/" + resortsMap.Austria.Mayrhofen.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report124', tempstring);
+    localStorage.setItem('report' + resortsMap.Austria.Mayrhofen.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report124");
+    handleError(e, "report" + resortsMap.Austria.Mayrhofen.resortId);
   });
   
  //console.log(localStorage.getItem('report124'));
