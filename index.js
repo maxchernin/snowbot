@@ -26,9 +26,19 @@ if (typeof localStorage === "undefined" || localStorage === null) {
   localStorage = new LocalStorage('./scratch');
 }
 console.log('Before job instantiation');
-const job = new CronJob('*/1 * * * *', function() {
-
+const job = new CronJob('*/3 * * * *', function() {
+  console.log(new Date().getTime());
+  
 //--------------------Tinges----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.France.Tignes.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.France.Tignes.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.France.Tignes.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.France.Tignes.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -39,6 +49,15 @@ const job = new CronJob('*/1 * * * *', function() {
   });
   
 //--------------------ValThorens----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.France.ValThorens.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.France.ValThorens.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -49,6 +68,15 @@ const job = new CronJob('*/1 * * * *', function() {
   });
 
   //--------------------Gudauri----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Gudauri.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.Georgia.Gudauri.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.Georgia.Gudauri.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Gudauri.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -60,16 +88,34 @@ const job = new CronJob('*/1 * * * *', function() {
   
 
   //--------------------Mestia----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Mestia.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.Georgia.Mestia.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.Georgia.Mestia.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Mestia.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
     localStorage.setItem('report' + resortsMap.Georgia.Mestia.resortId, tempstring);
   })
   .catch((e) => {
-    handleError(e, "report54888033");
+    handleError(e, "report" + resortsMap.Georgia.Mestia.resortId);
   });
 
   //--------------------Bakuriani----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Bakuriani.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.Georgia.Bakuriani.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.Georgia.Bakuriani.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Bakuriani.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -80,6 +126,15 @@ const job = new CronJob('*/1 * * * *', function() {
   });
 
   //--------------------Bansko----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.Bulgaria.Bansko.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.Bulgaria.Bansko.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.Bulgaria.Bansko.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.Bulgaria.Bansko.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -90,6 +145,15 @@ const job = new CronJob('*/1 * * * *', function() {
   });
 
   //--------------------Mayrhofen----------------//
+  axios.get(baseURL + "api/resortforecast/" + resortsMap.Austria.Mayrhofen.resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortsMap.Austria.Mayrhofen.resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortsMap.Austria.Mayrhofen.resortId);
+  });
+
   axios.get(baseURL + "api/snowreport/" + resortsMap.Austria.Mayrhofen.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
     let tempstring = ReportTemplate(response.data);
@@ -192,6 +256,13 @@ var KeyBoards = {
 //https://emojiterra.com/
 //TODO: calc avg of tempature
 function CreateDays(data) {
+  let header = forecastHeader(data);
+  console.log(header);
+  let snowingDaysArr = data.forecast.filter((dayPart => {
+    return dayPart.snow_mm > 0;
+  }))
+  console.log(snowingDaysArr.length);
+  if (snowingDaysArr.length > 0) {
   const items = data.forecast.map(function (item, index, array) {
     let day = index + 1 < data.forecast.length && item.date === data.forecast[index + 1].date ? true : false;
     let messageTemplate = `
@@ -203,10 +274,26 @@ function CreateDays(data) {
     לחות 💧 : ${ item.hum_avg_pct.toString()} %
     רוח 🌬️ : ${ item.vis_avg_km.toString()} קמ"ש 
       `
+    console.log(messageTemplate);
     return messageTemplate;
   });
+  
+  return header + items;
+  } else {
+    return "No snow is excpected in the next 4 days, try again later today";
+  }
+  
+}
 
-  return items;
+function forecastHeader(data){
+
+  let header =
+  "מדינה: " + data.country + "\n" +
+  "אתר: 🏔️ " + data.name + "\n" +
+  "תחזית לתאריכים: \n" + data.forecast[data.forecast.length - 1].date + " - " + data.forecast[0].date;
+  //console.log(header);
+
+  return header;  
 }
 
 function ReportTemplate(data){
@@ -225,11 +312,11 @@ function ReportTemplate(data){
 
 function handleError(e,localItem){
   switch (e.response.status) {
-    case 400: localStorage.setItem(localItem.toString(), "עמכם הסליחה, הבוט עדיין אינו תומך בהסטוריית מזג אוויר עבור אתר זה");
+    case 400: localStorage.setItem(localItem.toString(), "עמכם הסליחה, כרגע אין דיווחי שלג");
       break;
     case 403: localStorage.setItem(localItem.toString(), "אתר זה לא נתמך כרגע על ידי הבוט");
       break;
-    default: localStorage.setItem(localItem.toString(), "בעיית רשת, אנא נסה שנית מאוחר יותר");
+    default: //localStorage.setItem(localItem.toString(), "בעיית רשת, אנא נסה שנית מאוחר יותר");
       break;
   }
 }
@@ -298,33 +385,8 @@ bot.on("callback_query", (callbackQuery) => {
 
   if (callbackQuery.data === 'resortforecast') {
     bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
-    axios.get(baseURL + "api/resortforecast/" + selectedResortId + apiDaysHours + apiSuffix, {})
-      .then((response) => {
-
-        let snowingDaysArr = response.data.forecast.filter((dayPart => {
-          return dayPart.snow_mm > 0;
-        }))
-
-        let daysString = CreateDays(response.data);
-        if (snowingDaysArr.length > 0) {
-          bot.sendMessage(callbackQuery.message.chat.id, "מדינה: " + response.data.country + "\n" +
-            "אתר: 🏔️ " + response.data.name + "\n" +
-            "תחזית לתאריכים \n" + response.data.forecast[response.data.forecast.length - 1].date + " - " + response.data.forecast[0].date + " : \n" +
-            daysString.join(""), { parse_mode: 'Markdown' })
-        } else {
-          bot.sendMessage(callbackQuery.message.chat.id, "No snow is excpected in the next 4 days, try again later today")
-        }
-
-      })
-      .catch((e) => {
-        console.error(e.response);
-        switch (e.response.status) {
-          case '403': bot.sendMessage(callbackQuery.message.chat.id, "אתר זה לא נתמך כרגע על ידי הבוט");
-            break;
-          default: bot.sendMessage(callbackQuery.message.chat.id, "בעיית רשת, אנא נסה שנית מאוחר יותר");
-            break;
-        }
-      });
+    bot.sendMessage(callbackQuery.message.chat.id,
+      localStorage.getItem("forecast" + selectedResortId) , { parse_mode: 'Markdown' })
   }
   if (callbackQuery.data === 'report') {
     //bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
