@@ -351,13 +351,8 @@ bot.on('chosen_inline_result', result => {
   console.log("Max");
   console.log(result);
 })
-<<<<<<< HEAD
-
- 
-=======
 */
 
->>>>>>> danny-changes
 // setInterval(() => {
 //   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
 //     params: {
