@@ -3,7 +3,7 @@ process.env["NTBA_FIX_319"] = 1;
 // exports.handler = (event, context, callback) => {
 
 //TODO: ive written my name next to tasks that i should handle 
-/**
+/*
  * 1. cronjob - plan
  *  get report for each site
  * parse a report message for each site
@@ -17,7 +17,6 @@ process.env["NTBA_FIX_319"] = 1;
  */
 
 "use strict";
-
 
 const CronJob = require('cron/lib/cron.js').CronJob;
 
