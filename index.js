@@ -384,7 +384,6 @@ bot.on("callback_query", (callbackQuery) => {
 
 
   if (callbackQuery.data === 'resortforecast') {
-    bot.sendMessage(callbackQuery.message.chat.id, "עוד רגע, מביא מידע");
     bot.sendMessage(callbackQuery.message.chat.id,
       localStorage.getItem("forecast" + selectedResortId) , { parse_mode: 'Markdown' })
   }
