@@ -38,7 +38,6 @@ const job = new CronJob('*/1 * * * *', function() {
     handleError(e, "report" + resortsMap.France.Tignes.resortId);
   });
   
-
 //--------------------ValThorens----------------//
   axios.get(baseURL + "api/snowreport/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
   .then((response) => {
