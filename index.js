@@ -19,158 +19,6 @@ process.env["NTBA_FIX_319"] = 1;
 "use strict";
 
 const CronJob = require('cron/lib/cron.js').CronJob;
-
-
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  localStorage = new LocalStorage('./scratch');
-}
-console.log('Before job instantiation');
-const job = new CronJob('*/3 * * * *', function() {
-  console.log(new Date().getTime());
-  
-//--------------------Tinges----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.France.Tignes.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.France.Tignes.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.France.Tignes.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.France.Tignes.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.France.Tignes.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.France.Tignes.resortId);
-  });
-  
-//--------------------ValThorens----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.France.ValThorens.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.France.ValThorens.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.France.ValThorens.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.France.ValThorens.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.France.ValThorens.resortId);
-  });
-
-  //--------------------Gudauri----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Gudauri.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.Georgia.Gudauri.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.Georgia.Gudauri.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Gudauri.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.Georgia.Gudauri.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.Georgia.Gudauri.resortId);
-  });
-  
-
-  //--------------------Mestia----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Mestia.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.Georgia.Mestia.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.Georgia.Mestia.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Mestia.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.Georgia.Mestia.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.Georgia.Mestia.resortId);
-  });
-
-  //--------------------Bakuriani----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.Georgia.Bakuriani.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.Georgia.Bakuriani.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.Georgia.Bakuriani.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.Georgia.Bakuriani.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.Georgia.Bakuriani.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.Georgia.Bakuriani.resortId);
-  });
-
-  //--------------------Bansko----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.Bulgaria.Bansko.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.Bulgaria.Bansko.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.Bulgaria.Bansko.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.Bulgaria.Bansko.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.Bulgaria.Bansko.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.Bulgaria.Bansko.resortId);
-  });
-
-  //--------------------Mayrhofen----------------//
-  axios.get(baseURL + "api/resortforecast/" + resortsMap.Austria.Mayrhofen.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let forecastString = CreateDays(response.data);
-    localStorage.setItem('forecast' + resortsMap.Austria.Mayrhofen.resortId, forecastString);
-  })
-  .catch((e) => {
-    handleError(e, "forecast" + resortsMap.Austria.Mayrhofen.resortId);
-  });
-
-  axios.get(baseURL + "api/snowreport/" + resortsMap.Austria.Mayrhofen.resortId + apiDaysHours + apiSuffix, {})
-  .then((response) => {
-    let tempstring = ReportTemplate(response.data);
-    localStorage.setItem('report' + resortsMap.Austria.Mayrhofen.resortId, tempstring);
-  })
-  .catch((e) => {
-    handleError(e, "report" + resortsMap.Austria.Mayrhofen.resortId);
-  });
-  
- //console.log(localStorage.getItem('report124'));
-});
-//console.log('After job instantiation');
-job.start();
-
-
-
-
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const _ = require("lodash");
@@ -179,27 +27,10 @@ const { token, appKey, appId, baseURL, hourInterval, numOfDays, productionURL } 
 const apiSuffix = '&app_id=' + appId + "&app_key=" + appKey;
 const apiDaysHours = "?hourly_interval=" + hourInterval + "&num_of_days=" + numOfDays;
 const dictionary = require("./utils/Dictionary");
-// const schedule = require('node-schedule');
 let selectedLang;
 var selectedResortId;
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
-
-// var rule = new schedule.RecurrenceRule();
-// rule.hour = 0;
-// rule.minute = 0;
-// rule.second = 2;
-
-//cache forecast every 4 hours
-// schedule.scheduleJob(rule, function () {
-//   console.log(new Date(), 'Every 4 hours');
-// });
-
-//cache history daily
-// var j = schedule.scheduleJob('*/1 * * * *', function () {
-//   //
-//   // console.log('The answer to life, the universe, and everything!');
-// });
 
 const resortsMap = {
   "France": {
@@ -227,30 +58,47 @@ const resortsMap = {
   }
 
 }
-// const cronJobCalls = resortsMap.map((country, key) => {
-//   console.log(country);
-//   console.log(key);
-// })
-const cronJobCalls = _.reduce(resortsMap, (iterator, country) => {
-  // console.log(iterator);
-  // console.log(country);
 
-  let resorts = _.filter(country, (resort) => {
-    if (_.has(resort, 'resortId')) {
-      return resort
-    }
-  }).map((resort) => {
-    return resort.resortId
-  })
-  console.log(resorts);
-  return iterator;
-}, [])
-// console.log(cronJobCalls);
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
+console.log('Before job instantiation');
+const job = new CronJob('*/3 * * * *', function() {
+  console.log(new Date().getTime());
+  cacheLocal(resortsMap.France.Tignes.resortId)
+  cacheLocal(resortsMap.France.ValThorens.resortId)
+  cacheLocal(resortsMap.Austria.Mayrhofen.resortId)
+  cacheLocal(resortsMap.Bulgaria.Bansko.resortId)
+  cacheLocal(resortsMap.Georgia.Gudauri.resortId)  
+  cacheLocal(resortsMap.Georgia.Bakuriani.resortId)  
+});
+job.start();
 
 var KeyBoards = {
   "Back": [{ text: "Back" }],
   "siteReports": [{ text: "Snow Report", callback_data: "report" }, { text: "4 day Snow Forecast", callback_data: "resortforecast" }],
   "Countries": [[{ text: resortsMap.Bulgaria.flag + " Bulgaria" }, { text: resortsMap.Georgia.flag + " Georgia" }], [{ text: resortsMap.Austria.flag + " Austria" }, { text: resortsMap.France.flag + " France" }]]
+}
+
+function cacheLocal(resortId) {
+  axios.get(baseURL + "api/resortforecast/" + resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let forecastString = CreateDays(response.data);
+    localStorage.setItem('forecast' + resortId, forecastString);
+  })
+  .catch((e) => {
+    handleError(e, "forecast" + resortId);
+  });
+  axios.get(baseURL + "api/snowreport/" + resortId + apiDaysHours + apiSuffix, {})
+  .then((response) => {
+    let reportString = ReportTemplate(response.data);
+    localStorage.setItem('report' + resortId, reportString);
+  })
+  .catch((e) => {
+    handleError(e, "report" + resortsMap.Austria.Mayrhofen.resortId);
+  });
 }
 
 //https://emojiterra.com/
@@ -341,9 +189,7 @@ bot.onText(/\Georgia/, (msg) => {
   });
 });
 
-//, {"text": 'Mestia', callback_data: resortsMap.Georgia.Mestia.resortId}
 
-//TODO: fill in missing resort id's on callback data like above
 bot.onText(/\France/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
     "reply_markup": {
@@ -352,7 +198,6 @@ bot.onText(/\France/, (msg) => {
   });
 });
 
-//{"text": "Val Thorens", callback_data: 'valThorens'}
 
 bot.onText(/\Bulgaria/, (msg) => {
   bot.sendMessage(msg.chat.id, "Select a resort", {
@@ -413,15 +258,3 @@ bot.on('chosen_inline_result', result => {
   console.log(result);
 })
 */
-
-// setInterval(() => {
-//   axios.post(`https://api.telegram.org/${token}/setWebhook`, {
-//     params: {
-//       url: productionURL
-//     }
-//   })
-//   .catch( (e) => {
-//     console.error(e);
-//   })
-// }, 5000)
-// }
